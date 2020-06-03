@@ -1,3 +1,10 @@
+# Description:
+# Проверяем на пустые строки, проверяем на числа (помещаем в count_ingredients), проверяем на символ "|", если
+# да, то выполняем функцию cook_book_form(), где создаем список ингредиентов, если нет, то это название блюда
+# (помещаем в name_dishes). Создаем словарь cook_book из name_dishes : результат(cook_book_form).
+# Запускаем функцию order, где пользователь сам выбирает блюда и количество персон. Эти данные передаем в
+# get_shop_list_by_dishes(dishes, person_count, cook_book). И финальный вывод.
+
 def order(cook_book):
 	dishes = []
 	# ВВод пользовательских данных (количество людей и выбор блюд)
@@ -34,7 +41,7 @@ def order(cook_book):
 def get_shop_list_by_dishes(dishes, person_count, cook_book):
 		cook_book2 = {}
 		cook_book3 = {}
-		cook_book4 = []
+		ingredients1 = {}
 		#  создание словаря с выбранными блюдами
 		for dish in dishes:
 			for k, v in cook_book.items():
@@ -43,19 +50,18 @@ def get_shop_list_by_dishes(dishes, person_count, cook_book):
 		#  операция с количеством ингредиентов
 		for values in cook_book2.values():
 			for value in values:
-				#  ниже написанный код (в комментариях) отрабатывает, о чем сообщает первый print,
-				#  но в cook_book3 сохраняется лишь последний ингредиент из списка
-				#  (на примере Омлета - это Помидор).
-				#  Об этом говорит print с **** . Почему?
-				#  А если добавить список (cook_book4), то там все ингредиенты.
+				for k, v in value.items():
+					if k == 'ingredient_name':
+						name = v
+					if k == 'measure':
+						ingredients1[k] = v
 				for k, v in value.items():
 					if k == 'quantity':
-						v = int(v)*person_count
-					cook_book3.update([(k,v)])
-					cook_book4.append([k,v])
-					print(cook_book3)
+						v = int(v) * person_count
+						ingredients1[k] = v
+						cook_book3.update([(name, ingredients1)])
 		print(f'{cook_book3} ****')
-		print(cook_book4)
+
 
 
 def cook_book_form():
@@ -98,13 +104,6 @@ with open('recipes.txt', encoding='utf-8') as f:
 			else:
 				cook_book_form()
 				cook_book[name_dishes3] = list_cook
-				#  Почему-то при виде:
-				#  cook_book_form()
-				#  cook_book[name_dishes1] = list_cook
-				#  запись продолжается исключительно в "Омлет":
-				#  cook_book = {'Омлет':[{весь список ингредиентов в файле...}]},
-				#  хотя name_dishes1 меняется (Омлет, утка, картофель и т.д.)
-				#  Поэтому добавил name_dishes3 (выше), проверку на длину словаря и явное переименование.
 				if len(cook_book[name_dishes3]) == count_ingredients:
 					name_dishes3 = name_dishes1
 					list_cook = []
