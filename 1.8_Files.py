@@ -5,6 +5,9 @@
 # Запускаем функцию order, где пользователь сам выбирает блюда и количество персон. Эти данные передаем в
 # get_shop_list_by_dishes(dishes, person_count, cook_book). И финальный вывод.
 
+from pprint import pprint
+
+
 def order(cook_book):
 	dishes = []
 	# ВВод пользовательских данных (количество людей и выбор блюд)
@@ -55,12 +58,14 @@ def get_shop_list_by_dishes(dishes, person_count, cook_book):
 						name = v
 					if k == 'measure':
 						ingredients1[k] = v
+					pprint(ingredients1)
 				for k, v in value.items():
 					if k == 'quantity':
 						v = int(v) * person_count
 						ingredients1[k] = v
-						cook_book3.update([(name, ingredients1)])
-		print(f'{cook_book3} ****')
+					pprint(ingredients1)
+				cook_book3.update([(name, ingredients1)])
+		pprint(cook_book3)
 
 
 

@@ -7,6 +7,7 @@
 # или форматирование какой-то, но strip мне не помог.
 # Тем не менее, код выполняется даже без try-except.
 
+from pprint import pprint
 import traceback
 
 
@@ -55,7 +56,7 @@ def get_shop_list_by_dishes(dishes, person_count, cook_book):
                         v = int(v) * person_count
                         ingredients[k] = v
                 ingredient_for_order.update([(name, ingredients)])
-    print(ingredient_for_order)
+    pprint(ingredient_for_order)
 
 
 # Main
