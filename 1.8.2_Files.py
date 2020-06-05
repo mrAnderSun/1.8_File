@@ -41,22 +41,26 @@ def forma():
 
 
 def get_shop_list_by_dishes(dishes, person_count, cook_book):
-    ingredient_for_order = {}
-    ingredients = {}
+    shop_list_by_dishes = {}
+    ingredient_dict = {}
     for keys, values in cook_book.items():
         if keys in dishes:
             for value in values:
                 for k, v in value.items():
                     if k == 'ingredient_name':
                         name = v
-                    if k == 'measure':
-                        ingredients[k] = v
-                for k, v in value.items():
+                        continue
                     if k == 'quantity':
                         v = int(v) * person_count
-                        ingredients[k] = v
-                ingredient_for_order.update([(name, ingredients)])
-    pprint(ingredient_for_order)
+                        ingredient_dict[k] = v
+                        continue
+                    if k == 'measure':
+                        ingredient_dict[k] = v
+                    quantity_and_measure_dict = ingredient_dict.copy()
+                    del ingredient_dict
+                    ingredient_dict = {}
+                    shop_list_by_dishes[name] = quantity_and_measure_dict
+    pprint(shop_list_by_dishes)
 
 
 # Main
@@ -66,6 +70,6 @@ try:
 except Exception as err:
     print('Возникла Ошибка:\n', traceback.format_exc())
 dishes = ['Запеченный картофель', 'Омлет']
-person_count = int(input("Input persons count: "))
+person_count = 2  #int(input("Input persons count: "))
 print(dishes)
 get_shop_list_by_dishes(dishes, person_count, cook_book)
