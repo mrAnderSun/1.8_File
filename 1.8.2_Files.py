@@ -1,23 +1,30 @@
 # Description:
-# Две функции. Одна (forma()) считывает файл и преобразует данные в cook_book.
-# Вторая функция get_shop_list_by_dishes выводит финальный результат.
-# dishes задан вручную. person_count вводится в консоли.
-# Возникает ошибка при запуске (вывел в исключения). ValueError
-# if isinstance(int(line_count), int) - ругается на это. Полагаю, что в строке присутствует пробел
-# или форматирование какой-то, но strip мне не помог.
-# Тем не менее, код выполняется даже без try-except.
+# Функция main() - Ввод данных и запуск forma().
+# Функция forma() - преобразование содержимого текстового файла в словарь.
+# Функция get_shop_list_by_dishes() - создание словаря на основе введенных данных и результатов forma().
+
 
 from pprint import pprint
 import traceback
 
 
-def forma():
+def main_def():
+    cook_book = {}
+    try:
+        forma(cook_book)
+    except Exception as err:
+        print('Возникла Ошибка:\n', traceback.format_exc())
+    dishes = ['Омлет', 'Омлет', 'Омлет']
+    person_count = 2  #int(input("Input persons count: "))
+    print(dishes)
+    get_shop_list_by_dishes(dishes, person_count, cook_book)
+
+
+def forma(cook_book):
     with open('recipes.txt', encoding='utf8') as f:
         while True:
             cook_notes = []
             key = f.readline().rstrip()
-            #  line_count1 = f.readline().rstrip().split()
-            #  line_count = int(line_count1[0])
             line_count = f.readline().rstrip()
             if isinstance(int(line_count), int):
                 line_count = int(line_count)
@@ -43,15 +50,18 @@ def forma():
 def get_shop_list_by_dishes(dishes, person_count, cook_book):
     shop_list_by_dishes = {}
     ingredient_dict = {}
+    ingredient_name = []
     for keys, values in cook_book.items():
         if keys in dishes:
+            keys_count = dishes.count(keys)
             for value in values:
                 for k, v in value.items():
                     if k == 'ingredient_name':
-                        name = v
+                        ingredient_name.append(v)
+                        ingredient_count = ingredient_name.count(v)
                         continue
                     if k == 'quantity':
-                        v = int(v) * person_count
+                        v = int(v) * person_count*keys_count*ingredient_count
                         ingredient_dict[k] = v
                         continue
                     if k == 'measure':
@@ -59,17 +69,9 @@ def get_shop_list_by_dishes(dishes, person_count, cook_book):
                     quantity_and_measure_dict = ingredient_dict.copy()
                     del ingredient_dict
                     ingredient_dict = {}
-                    shop_list_by_dishes[name] = quantity_and_measure_dict
+                    shop_list_by_dishes[ingredient_name[-1]] = quantity_and_measure_dict
     pprint(shop_list_by_dishes)
 
 
 # Main
-cook_book = {}
-try:
-    forma()
-except Exception as err:
-    print('Возникла Ошибка:\n', traceback.format_exc())
-dishes = ['Запеченный картофель', 'Омлет']
-person_count = 2  #int(input("Input persons count: "))
-print(dishes)
-get_shop_list_by_dishes(dishes, person_count, cook_book)
+main_def()

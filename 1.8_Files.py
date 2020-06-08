@@ -45,28 +45,35 @@ def get_shop_list_by_dishes(dishes, person_count):
     cook_book2 = {}
     ingredients = {}
     shop_list_by_dishes = {}
+    name = []
     #  создание словаря с выбранными блюдами
     for dish in dishes:
         for k, v in cook_book.items():
             if dish == k:
                 cook_book2.update([(k,v)])
+                dishes_count = dishes.count(k)
+                #print(dishes_count)
         #  операция с количеством ингредиентов
         for values in cook_book2.values():
             for value in values:
                 for k, v in value.items():
                     if k == 'ingredient_name':
-                        name = v
+                        #name = v
+                        name.append(v)
+                        name_count = name.count(v)
+                        print(name_count, v)
                         continue
                     if k == 'quantity':
-                        v = int(v) * person_count
+                        print(name_count)
+                        v = int(v) * person_count*name_count
                         ingredients[k] = v
                         continue
                     if k == 'measure':
                         ingredients[k] = v
                     cook_book3 = ingredients
                     ingredients = {}
-                    shop_list_by_dishes.update([(name, cook_book3)])
-        pprint(shop_list_by_dishes)
+                    shop_list_by_dishes.update([(name[-1], cook_book3)])
+    pprint(shop_list_by_dishes)
 
 
 def cook_book_form():
